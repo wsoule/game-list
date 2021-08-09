@@ -1,0 +1,11 @@
+ul.list{
+    border: 1px solid#000;
+}
+#played-list{
+    list-style-type: circle;
+}
+#controller{
+    width: 100px;
+    display: block;
+    margin: 0 auto;
+}
