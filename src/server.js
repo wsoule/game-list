@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 const app = express();
 const port = 3000;
 
@@ -7,32 +8,17 @@ app.use((request, response, next) => {
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     next();
   });
-
-// app.get('/played-list',(req,res));
-// app.get('/unplayed',(req,res));
-// res.json();
-
 app.get('/played-games', (req, res) => {
-    res.json([
-        'Death Stranding',
-        'Days Gone',
-        'Minecraft',
-        'Call of Duty: Cold War',
-        'GTA 5'
-    ]);
+    fs.readFile(__dirname + '/../data/played-games.json', 'utf8' , (err, data) => {
+        res.send(data);
+    });
 });
-
 app.get('/unplayed-games', (req, res) => {
-    res.send([
-        'Hot Wheels Unleashed',
-        'Deathloop',
-        'Hot Wheels Unleashed',
-        'Deathloop',
-        'Fallout: New Vegas',
-        'Minecraft 2',
-        'Star Wars: Knights of the Old Republic'
-    ]);
+    fs.readFile(__dirname + '/../data/unplayed-games.json', 'utf8' , (err, data) => {
+        res.send(data);
+    });
 });
+app.get('/', (req,res) => res.send("hello again"));
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

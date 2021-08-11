@@ -2,10 +2,16 @@
     "name": "game-list",
     "version": "0.0.0",
     "description": "List of Games",
-    "scripts": {},
+    "scripts": {
+        "start-server": "nodemon src/server.js"
+    },
     "author": "Wyat Soule",
     "license": "UNLICENSED",
     "dependencies": {
         "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.12"
     }
+    
 }
