@@ -19,7 +19,7 @@ app.get('/unplayed-games', (req, res) => {
     });
 });
 app.get('/', (req,res) => res.send("hello again"));
-
+app.use('/assets', express.static('assets'));
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

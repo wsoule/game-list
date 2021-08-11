@@ -18,6 +18,7 @@ h1{
 p.main{
     font-weight: bold;
     font-size: larger;
+    display: inline-block;
 }
 ul.list{
     border-left: 5px solid blue;

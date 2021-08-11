@@ -16,6 +16,9 @@ function makeListofGames(list, games){
     games.forEach((game) => addGame(list,game)); 
 }
 function addGame(list, gameName){
+    if(!gameName || !gameName.trim()){
+        return;
+    }
     const listItem = document.createElement('li');
     listItem.innerText = gameName;
     list.appendChild(listItem);
@@ -30,15 +33,17 @@ function removeGame(list, gameName){
 const playedList = document.getElementById('played-list');
 const unplayedList = document.getElementById('unplayed');
 
-function getJson(url){
-    return fetch(url).then((res) => res.json());
+async function getJson(url){
+    return (await fetch(url)).json();
 }
-function main(){
-    getJson(`${environment.urls.api}/unplayed-games`).then((unplayedGames) => {
-        makeListofGames(unplayedList, unplayedGames);
-    });
-    getJson(`${environment.urls.api}/played-games`).then((playedGames) => {
-        makeListofGames(playedList, playedGames);
-    });
+async function main(){
+    const controller = document.getElementById('controller');
+    controller.src = `${environment.urls.api}/assets/smile.png`;
+    const [unplayedGames, playedGames] = await Promise.all([
+        getJson(`${environment.urls.api}/unplayed-games`), 
+        getJson(`${environment.urls.api}/played-games`)
+    ]);
+    makeListofGames(unplayedList,unplayedGames);
+    makeListofGames(playedList, playedGames);
 }
 main();
