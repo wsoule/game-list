@@ -1,18 +1,44 @@
-// alert('hello');
-/*
-let myImage = document.querySelector('controller');
-myImage.onclick = function(){
-    let srcChange = myImage.getAttribute('src');
-    if(srcChange === 'file:///Users/wsoule/Sites/dudeman/assets/controller.jpeg'){
-        myImage.setAttribute('src', 'file:///Users/wsoule/Sites/dudeman/assets/smile.png');
-    } else {
-        myImage.setAttribute('src', 'file:///Users/wsoule/Sites/dudeman/assets/controller.jpeg')
+const environment = {
+    urls: {
+        api: 'http://localhost:3000'
     }
+};
+function addNewGameUnplayed(){
+    let gameTitle = prompt('Game Title');
+    addGame(unplayedList,gameTitle);
 }
+function addNewGamePlayed(){
+    let gameTitle = prompt('Game Title');
+    addGame(playedList,gameTitle);
+    removeGame(unplayedList, gameTitle);
+}
+function makeListofGames(list, games){
+    games.forEach((game) => addGame(list,game)); 
+}
+function addGame(list, gameName){
+    const listItem = document.createElement('li');
+    listItem.innerText = gameName;
+    list.appendChild(listItem);
+}
+function removeGame(list, gameName){
+    Array.from(list.children).forEach((listItem) => {
+        if(listItem.innerText === gameName){
+            list.removeChild(listItem);
+        }
+    });
+}
+const playedList = document.getElementById('played-list');
+const unplayedList = document.getElementById('unplayed');
 
-let myButton = document.querySelector('First Button');
-let myHeading = document.getElementById('change');
-myButton.onclick = function(){
-    myHeading.textContent = 'you changed';
+function getJson(url){
+    return fetch(url).then((res) => res.json());
 }
-*/
+function main(){
+    getJson(`${environment.urls.api}/unplayed-games`).then((unplayedGames) => {
+        makeListofGames(unplayedList, unplayedGames);
+    });
+    getJson(`${environment.urls.api}/played-games`).then((playedGames) => {
+        makeListofGames(playedList, playedGames);
+    });
+}
+main();

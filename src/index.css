@@ -1,5 +1,30 @@
+div{
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 2px solid black;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+#githubLink{
+    text-decoration: none;
+}
+h1{
+    text-align: center;
+    text-transform: uppercase;
+}
+#topPage{
+    text-align: justify;
+}
+p.main{
+    font-weight: bold;
+    font-size: larger;
+}
 ul.list{
-    border: 1px solid#000;
+    border-left: 5px solid blue;
+    background-color: lightblue;
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 #played-list{
     list-style-type: circle;

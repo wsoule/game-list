@@ -5,29 +5,20 @@
     <link rel="stylesheet" href="file:///Users/wsoule/Sites/dudeman/src/index.css" />
 </head>
 <body> 
-    <h1>Game Rating</h1>
-    <!-- <h1 id='change'>Change Me</h1> -->
+    <div>
+        <h1>Game Rating</h1>
+        <p id="topPage">This is a page to put your games that you have played and games that you want to play in the future. You can visit the Github link 
+            <a id="githubLink" href="https://github.com/wsoule/dudeman">here</a>.
+        </p>
+    </div>
     <img id="controller" src="/Users/wsoule/Sites/dudeman/assets/controller.jpeg" alt="Dualshock 4 Controller">
-    <p>Games Played:</p>
-    <ul id="played-list" class="list">
-        <li>Dreath Stranding</li>
-        <li>Days Gone</li>
-        <li>Minecraft</li>
-        <li>Call of Duty: Cold War</li>
-        <li>GTA 5</li>
-    </ul>
-    <p>Games Wanting To Play:</p>
-    <ul class="list">
-        <li>Hot Wheels Unleashed</li>
-        <li>Deathloop</li>
-        <li>Fallout: New Vegas</li>
-        <li>Minecraft 2</li>
-        <li>Star Wars: Knights of the Old Republic</li>
-    </ul>
-    <a href="https://github.com/wsoule/dudeman"> Github Link </a>
-    <button>First Button</button>
+    <p class="main">Games Played:</p>
+    <button id="gameAddPlay" type="button" onclick="addNewGamePlayed()">Add New Game to Played List</button>
+    <ul id="played-list" class="list"> </ul>
+    <p class="main">Games Wanting To Play:</p>
+    <button id="gameAddUnplay" type="button" onclick="addNewGameUnplayed()">Add New Game to Unplayed List</button>
+    <ul id="unplayed" class="list"></ul>
+    <script src="file:///Users/wsoule/Sites/dudeman/src/index.js"> </script>
+
 </body>
-<script src="file:///Users/wsoule/Sites/dudeman/src/index.js"></script>
-
-
 </html>
