@@ -7,10 +7,13 @@ function addNewGameUnplayed(){
     let gameTitle = prompt('Game Title');
     addGame(unplayedList,gameTitle);
 }
-function addNewGamePlayed(){
+async function addNewGamePlayed(){
     let gameTitle = prompt('Game Title');
-    addGame(playedList,gameTitle);
-    removeGame(unplayedList, gameTitle);
+    const getText = await postText(`${environment.urls.api}/add-played-game`, gameTitle);
+    //getJson(`${environment.urls.api}/add-played-game`)
+    //addGame(playedList,await getText.text());
+    console.log((await getText.text()));
+    // removeGame(unplayedList, gameTitle);
 }
 function makeListofGames(list, games){
     games.forEach((game) => addGame(list,game)); 
@@ -22,6 +25,15 @@ function addGame(list, gameName){
     const listItem = document.createElement('li');
     listItem.innerText = gameName;
     list.appendChild(listItem);
+}
+function postText(url, body){
+    return fetch(url, {
+        body: body,
+        headers: {
+            'Content-Type':'text/plain'
+        },
+        method: 'POST'
+    });
 }
 function removeGame(list, gameName){
     Array.from(list.children).forEach((listItem) => {
@@ -35,6 +47,9 @@ const unplayedList = document.getElementById('unplayed');
 
 async function getJson(url){
     return (await fetch(url)).json();
+}
+async function getString(url){
+    return (await fetch(url)).toString();
 }
 async function main(){
     const controller = document.getElementById('controller');
