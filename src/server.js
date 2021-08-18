@@ -29,7 +29,6 @@ app.post('/add-played-game', (req, res) => {
     console.log(req.body);
     res.send(req.body);
 });
-
 app.get('/', (req,res) => res.send("hello again"));
 
 app.listen(port, () => {
