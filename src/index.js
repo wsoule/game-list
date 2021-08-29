@@ -1,19 +1,19 @@
 const environment = {
     urls: {
-        api: 'http://localhost:3000'
+        api: 'http://localhost:3001'
     }
 };
-function addNewGameUnplayed(){
+async function addNewGameUnplayed(){
     let gameTitle = prompt('Game Title');
-    addGame(unplayedList,gameTitle);
+    const unplayedGames= await postText(`${environment.urls.api}/add-unplayed-game`, gameTitle);
+    unplayedList.innerHTML = '';
+    makeListofGames(unplayedList, await unplayedGames.json());
 }
 async function addNewGamePlayed(){
     let gameTitle = prompt('Game Title');
-    const getText = await postText(`${environment.urls.api}/add-played-game`, gameTitle);
-    //getJson(`${environment.urls.api}/add-played-game`)
-    //addGame(playedList,await getText.text());
-    console.log((await getText.text()));
-    // removeGame(unplayedList, gameTitle);
+    const playedGames= await postText(`${environment.urls.api}/add-played-game`, gameTitle);
+    playedList.innerHTML = '';
+    makeListofGames(playedList, await playedGames.json());
 }
 function makeListofGames(list, games){
     games.forEach((game) => addGame(list,game)); 

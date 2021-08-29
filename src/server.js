@@ -2,7 +2,7 @@ const { response } = require('express');
 const express = require('express');
 const fs = require('fs');
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use((request, response, next) => {
     response.header('Access-Control-Allow-Origin', '*');
@@ -24,13 +24,31 @@ app.get('/unplayed-games', (req, res) => {
         res.send(data);
     });
 });
+app.post('/add-unplayed-game', (req, res) => {
+    fs.readFile(__dirname + '/../data/unplayed-games.json', 'utf8' , (err, unplayData) => {
+        const unplayedArray = JSON.parse(unplayData);
+        unplayedArray.push(req.body);
+        const unplayString = JSON.stringify(unplayedArray);
+        fs.writeFile(__dirname + '/../data/unplayed-games.json', unplayString, (err) => {
+            res.send(unplayString);
+        });
+    });
+});
 
 app.post('/add-played-game', (req, res) => {
-    console.log(req.body);
-    res.send(req.body);
+    fs.readFile(__dirname + '/../data/played-games.json', 'utf8' , (err, readData) => {
+        const playedArray = JSON.parse(readData);
+        playedArray.push(req.body);
+        console.log(playedArray);
+        const playedString = JSON.stringify(playedArray);
+        fs.writeFile(__dirname + '/../data/played-games.json', playedString, (err) => {
+            res.send(playedString);
+        });
+    });
 });
+
 app.get('/', (req,res) => res.send("hello again"));
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`Example app listening at http://localhost:${port}`);
 });
