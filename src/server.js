@@ -40,6 +40,18 @@ app.post('/add-unplayed-game', (req, res) => {
 app.post('/add-played-game', (req, res) => {
     addGameToCollection('/../data/played-games.json', req, res);
 });
+app.delete('/remove-played-game', (req, res) => {
+    fs.readFile(__dirname + '/../data/played-games.json', 'utf8' , (_err, data) => {
+        const dataArray = JSON.parse(data);
+        const itemIndex = dataArray.indexOf(req.body);
+        dataArray.splice(itemIndex,1);
+        const dataString = JSON.stringify(dataArray);
+        fs.writeFile(__dirname + '/../data/played-games.json', dataString,(_err) => {
+            console.log(dataString);
+            res.send(dataString);
+        });
+    });
+});
 app.get('/', (req,res) => res.send("hello again"));
 
 app.listen(port, () => {
