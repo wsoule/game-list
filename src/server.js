@@ -3,7 +3,17 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const port = 3001;
-
+function addGameToCollection(webAddress, req, res){
+    fs.readFile(__dirname + webAddress, 'utf8' , (err, data) => {
+        const dataArray = JSON.parse(data);
+        dataArray.push(req.body);
+        const dataString = JSON.stringify(dataArray);
+        fs.writeFile(__dirname + webAddress, dataString, (err) => {
+            res.send(dataString);
+            console.log(dataString);
+        });
+    });
+}
 app.use((request, response, next) => {
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -25,28 +35,11 @@ app.get('/unplayed-games', (req, res) => {
     });
 });
 app.post('/add-unplayed-game', (req, res) => {
-    fs.readFile(__dirname + '/../data/unplayed-games.json', 'utf8' , (err, unplayData) => {
-        const unplayedArray = JSON.parse(unplayData);
-        unplayedArray.push(req.body);
-        const unplayString = JSON.stringify(unplayedArray);
-        fs.writeFile(__dirname + '/../data/unplayed-games.json', unplayString, (err) => {
-            res.send(unplayString);
-        });
-    });
+    addGameToCollection('/../data/unplayed-games.json', req, res);
 });
-
 app.post('/add-played-game', (req, res) => {
-    fs.readFile(__dirname + '/../data/played-games.json', 'utf8' , (err, readData) => {
-        const playedArray = JSON.parse(readData);
-        playedArray.push(req.body);
-        console.log(playedArray);
-        const playedString = JSON.stringify(playedArray);
-        fs.writeFile(__dirname + '/../data/played-games.json', playedString, (err) => {
-            res.send(playedString);
-        });
-    });
+    addGameToCollection('/../data/played-games.json', req, res);
 });
-
 app.get('/', (req,res) => res.send("hello again"));
 
 app.listen(port, () => {
