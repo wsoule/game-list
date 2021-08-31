@@ -3,18 +3,33 @@ const environment = {
         api: 'http://localhost:3001'
     }
 };
+function askPrompt(){
+    gameTitle = prompt("Game Name");
+}
+
+async function deleteElement(webAddress, list){
+    const gameArray = await deleteText(webAddress, gameTitle);
+    list.innerHTML = '';
+    makeListofGames(list, await gameArray.json());
+}
 async function addNewGameUnplayed(){
-    let gameTitle = prompt('Game Title');
-    const unplayedGames= await postText(`${environment.urls.api}/add-unplayed-game`, gameTitle);
-    unplayedList.innerHTML = '';
-    makeListofGames(unplayedList, await unplayedGames.json());
+    askPrompt();
+    if(gameTitle != ''){
+        const unplayedGames= await postText(`${environment.urls.api}/add-unplayed-game`, gameTitle);
+        unplayedList.innerHTML = '';
+        makeListofGames(unplayedList, await unplayedGames.json());
+    }
 }
 async function addNewGamePlayed(){
-    let gameTitle = prompt('Game Title');
-    const playedGames= await postText(`${environment.urls.api}/add-played-game`, gameTitle);
-    playedList.innerHTML = '';
-    makeListofGames(playedList, await playedGames.json());
-}
+    askPrompt();
+    if(gameTitle != ''){
+        const playedGames= await postText(`${environment.urls.api}/add-played-game`, gameTitle);
+        playedList.innerHTML = '';
+        makeListofGames(playedList, await playedGames.json());
+        removeGame(unplayedList, gameTitle);
+        } 
+    }
+
 function makeListofGames(list, games){
     games.forEach((game) => addGame(list,game)); 
 }
@@ -35,10 +50,27 @@ function postText(url, body){
         method: 'POST'
     });
 }
-function removeGame(list, gameName){
+function deleteText(url, body){
+    return fetch(url, {
+        body: body,
+        headers: {
+            'Content-Type':'text/plain'
+        },
+        method: 'DELETE'
+    });
+}
+async function deletePlayedGame(){
+    askPrompt();
+    deleteElement(`${environment.urls.api}/remove-played-game`, playedList);
+}
+async function deleteUnplayedGame(){
+    askPrompt();
+    deleteElement(`${environment.urls.api}/remove-unplayed-game`, unplayedList);
+}
+async function removeGame(list, gameTitle){
     Array.from(list.children).forEach((listItem) => {
-        if(listItem.innerText === gameName){
-            list.removeChild(listItem);
+        if(listItem.innerText === gameTitle){
+            deleteElement(`${environment.urls.api}/remove-unplayed-game`, unplayedList);
         }
     });
 }

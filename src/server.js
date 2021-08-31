@@ -1,3 +1,4 @@
+
 const { response } = require('express');
 const express = require('express');
 const fs = require('fs');
@@ -6,15 +7,33 @@ const port = 3001;
 function addGameToCollection(webAddress, req, res){
     fs.readFile(__dirname + webAddress, 'utf8' , (err, data) => {
         const dataArray = JSON.parse(data);
-        dataArray.push(req.body);
+        if(dataArray.indexOf(req.body) < 0){
+            dataArray.push(req.body);
+        }
         const dataString = JSON.stringify(dataArray);
         fs.writeFile(__dirname + webAddress, dataString, (err) => {
             res.send(dataString);
-            console.log(dataString);
         });
+    
+    });
+}
+function removeGameFromCollection(webAddress, req, res){
+    fs.readFile(__dirname + webAddress, 'utf8' , (_err, data) => {
+        const dataArray = JSON.parse(data);
+        const itemIndex = dataArray.indexOf(req.body);
+        if(dataArray.includes(req.body)){
+            dataArray.splice(itemIndex,1);
+            const dataString = JSON.stringify(dataArray);
+            fs.writeFile(__dirname + webAddress, dataString,(_err) => {
+                res.send(dataString);
+            });
+        } else{
+            res.send(data);
+        }
     });
 }
 app.use((request, response, next) => {
+    response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     next();
@@ -41,16 +60,10 @@ app.post('/add-played-game', (req, res) => {
     addGameToCollection('/../data/played-games.json', req, res);
 });
 app.delete('/remove-played-game', (req, res) => {
-    fs.readFile(__dirname + '/../data/played-games.json', 'utf8' , (_err, data) => {
-        const dataArray = JSON.parse(data);
-        const itemIndex = dataArray.indexOf(req.body);
-        dataArray.splice(itemIndex,1);
-        const dataString = JSON.stringify(dataArray);
-        fs.writeFile(__dirname + '/../data/played-games.json', dataString,(_err) => {
-            console.log(dataString);
-            res.send(dataString);
-        });
-    });
+    removeGameFromCollection('/../data/played-games.json', req, res);
+});
+app.delete('/remove-unplayed-game', (req, res) =>{
+    removeGameFromCollection('/../data/unplayed-games.json', req, res);
 });
 app.get('/', (req,res) => res.send("hello again"));
 
