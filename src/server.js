@@ -20,8 +20,9 @@ function addGameToCollection(webAddress, req, res){
 function removeGameFromCollection(webAddress, req, res){
     fs.readFile(__dirname + webAddress, 'utf8' , (_err, data) => {
         const dataArray = JSON.parse(data);
-        const itemIndex = dataArray.indexOf(req.body);
-        if(dataArray.includes(req.body)){
+        const itemIndex = parseInt(req.body);
+        console.log("itemIndex", itemIndex, typeof itemIndex);
+        if(itemIndex > -1 && itemIndex<dataArray.length){
             dataArray.splice(itemIndex,1);
             const dataString = JSON.stringify(dataArray);
             fs.writeFile(__dirname + webAddress, dataString,(_err) => {

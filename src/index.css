@@ -1,4 +1,4 @@
-div{
+div.page-description{
     padding-left: 20px;
     padding-right: 20px;
     border: 2px solid black;
@@ -12,7 +12,7 @@ h1{
     text-align: center;
     text-transform: uppercase;
 }
-#topPage{
+#top-paragraph{
     text-align: justify;
 }
 p.main{
