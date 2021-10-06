@@ -12,14 +12,16 @@
         </p>
     </div>
     <img id="controller" alt="Dualshock 4 Controller">
-    <p class="main">Games Played:</p>
-    <button id="gameAddPlay" type="button" onclick="addNewGamePlayed()">Add New Game to Played List</button>
-    <button id="deletePlayed" type="button" onclick="deletePlayedGame()">Delete Game</button>
-    <ul id="played-list" class="list"> </ul>
-    <p class="main">Games Wanting To Play:</p>
-    <button id="gameAddUnplay" type="button" onclick="addNewGameUnplayed()">Add New Game to Unplayed List</button>
-    <button id="deleteUnplayed" type="button" onclick="deleteUnplayedGame()">Delete Game</button>
-    <ul id="unplayed" class="list"></ul>
+    <div class="button-class-block" id="play-all">
+        <p class="main">Games Played:</p>
+        <button class="buttons" id="gameAddPlay" type="button" onclick="addNewGamePlayed()">Add New Game to Played List</button>
+        <ul id="played-list" class="list"> </ul>
+    </div>
+    <div class="button-class-block" id="unplay-all">
+        <p class="main">Games Wanting To Play:</p>
+        <button class="buttons" id="gameAddUnplay" type="button" onclick="addNewGameUnplayed()">Add New Game to Unplayed List</button>
+        <ul id="unplayed" class="list"></ul>
+    </div>
     <script src="file:///Users/wsoule/Sites/dudeman/src/index.js"> </script>
 
 </body>

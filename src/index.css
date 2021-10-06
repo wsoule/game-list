@@ -2,8 +2,8 @@ div.page-description{
     padding-left: 20px;
     padding-right: 20px;
     border: 2px solid black;
-    margin-left: 25%;
-    margin-right: 25%;
+    margin-left: 10vw;
+    margin-right: 10vw;
 }
 #githubLink{
     text-decoration: none;
@@ -13,12 +13,22 @@ h1{
     text-transform: uppercase;
 }
 #top-paragraph{
-    text-align: justify;
+    text-align: center;
 }
 p.main{
     font-weight: bold;
     font-size: larger;
-    /* display: inline-block; */
+}
+div.button-class-block{
+    box-sizing: border-box;
+    display:inline-block;
+    width: 49vw;
+}
+#unplay-all{
+    padding-right: 10vw;
+}
+#play-all{
+    padding-left: 10vw;
 }
 ul.list{
     border-left: 5px solid blue;
@@ -34,4 +44,16 @@ ul.list{
     width: 100px;
     display: block;
     margin: 0 auto;
+}
+
+@media only screen and (max-width: 1000px) {
+    div.button-class-block{
+        width: 100%;
+    }
+    #unplay-all{
+        padding-left: 10vw;
+    }
+    #play-all{
+        padding-right:10vw;
+    }
 }

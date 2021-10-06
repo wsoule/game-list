@@ -6,7 +6,11 @@ const environment = {
 function askPrompt(){
     return prompt("Game Name");
 }
-
+async function addGamePromise(listName, gameList, gameTitle){
+    const promisedGames= await postText(`${environment.urls.api}/add-${listName}-game`, gameTitle);
+    gameList.innerHTML = '';
+    makeListofGames(gameList, listName, await promisedGames.json());
+}
 async function deleteElement(list, listName, gameIndex){
     const gameResponse = await deleteText(`${environment.urls.api}/remove-${listName}-game`, gameIndex);
     list.innerHTML = '';
@@ -15,26 +19,23 @@ async function deleteElement(list, listName, gameIndex){
 async function addNewGameUnplayed(){
     const gameTitle = askPrompt();
     if(gameTitle != ''){
-        const unplayedGames= await postText(`${environment.urls.api}/add-unplayed-game`, gameTitle);
-        unplayedList.innerHTML = '';
-        makeListofGames(unplayedList, "unplayed", await unplayedGames.json());
+        addGamePromise("unplayed", unplayedList, gameTitle);
     }
 }
 async function addNewGamePlayed(){
     const gameTitle = askPrompt();
+    await addGamePromise("played", playedList, gameTitle);
     if(gameTitle != ''){
-        const playedGames= await postText(`${environment.urls.api}/add-played-game`, gameTitle);
-        playedList.innerHTML = '';
-        makeListofGames(playedList, "played" ,await playedGames.json());
-        removeGame(unplayedList, gameTitle);
-        } 
-    }
-
+        const index = Array.from(unplayedList.children).findIndex(unplayedGame => {
+            return unplayedGame.childNodes[0].textContent === gameTitle;
+        });
+        await deleteElement(unplayedList,"unplayed", index);
+    } 
+}
 function makeListofGames(list,listName, games){
     games.forEach((gameName, gameIndex) => {
         addGame(list,listName, gameName, gameIndex);
     }); 
-
 }
 function addGame(list, listName, gameName, gameIndex){
     if(!gameName || !gameName.trim()){
@@ -50,7 +51,6 @@ function addGame(list, listName, gameName, gameIndex){
     });
     listItem.appendChild(textNode);
     listItem.appendChild(buttonList)
-    //console.log(listItem);
     list.appendChild(listItem); 
 
 }
@@ -70,22 +70,6 @@ function deleteText(url, body){
             'Content-Type':'text/plain'
         },
         method: 'DELETE'
-    });
-}
-// async function deletePlayedGame(){
-//     //askPrompt();
-//     deleteElement(`${environment.urls.api}/remove-played-game`, playedList);
-//     //console.log("deletePlayedGame");
-// }
-// async function deleteUnplayedGame(){
-//     //askPrompt();
-//     deleteElement(`${environment.urls.api}/remove-unplayed-game`, unplayedList);
-// }
-async function removeGame(list, gameTitle){
-    Array.from(list.children).forEach((listItem) => {
-        if(listItem.innerText === gameTitle){
-            deleteElement(`${environment.urls.api}/remove-unplayed-game`, unplayedList);
-        }
     });
 }
 const playedList = document.getElementById('played-list');
