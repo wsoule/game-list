@@ -19,6 +19,7 @@ async function deleteElement(list, listName, gameIndex){
 async function addNewGameUnplayed(){
     const gameTitle = askPrompt();
     if(gameTitle != ''){
+        console.log(gameTitle);
         addGamePromise("unplayed", unplayedList, gameTitle);
     }
 }
@@ -32,8 +33,8 @@ async function addNewGamePlayed(){
         await deleteElement(unplayedList,"unplayed", index);
     } 
 }
-function makeListofGames(list,listName, games){
-    games.forEach((gameName, gameIndex) => {
+function makeListofGames(list,listName, gamesList){
+    gamesList.items.forEach((gameName, gameIndex) => {
         addGame(list,listName, gameName, gameIndex);
     }); 
 }
@@ -45,7 +46,6 @@ function addGame(list, listName, gameName, gameIndex){
     const textNode = document.createTextNode(gameName);
     const buttonList = document.createElement('button');
     buttonList.innerText = 'X';
-    // buttonList.style.backgroundColor = 'lightcoral';
     buttonList.classList.add('delete-button');
     buttonList.addEventListener("click", function(){
         deleteElement(list, listName, gameIndex);
@@ -86,7 +86,7 @@ async function main(){
     const controller = document.getElementById('controller');
     controller.src = `${environment.urls.api}/assets/smile.png`;
     const [unplayedGames, playedGames] = await Promise.all([
-        getJson(`${environment.urls.api}/unplayed-games`), 
+        getJson(`${environment.urls.api}/unplayed-games`),
         getJson(`${environment.urls.api}/played-games`)
     ]);
     makeListofGames(unplayedList, "unplayed", unplayedGames);

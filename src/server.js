@@ -4,31 +4,32 @@ const fs = require('fs');
 const app = express();
 const port = 3000;
 app.use(express.static('src/public'));
-function addGameToCollection(webAddress, req, res){
-    fs.readFile(__dirname + webAddress, 'utf8' , (err, data) => {
-        const dataArray = JSON.parse(data);
-        if(dataArray.indexOf(req.body) < 0){
-            dataArray.push(req.body);
+function addGameToCollection(gameListId, req, res){
+    fs.readFile(__dirname + '/../data/game-lists.json', 'utf8' , (err, data) => {
+        const gameLists = JSON.parse(data);
+        const gameList = gameLists.find((list) => list.id === gameListId);
+        if(gameList.items.indexOf(req.body) < 0){
+            gameList.items.push(req.body);
         }
-        const dataString = JSON.stringify(dataArray);
-        fs.writeFile(__dirname + webAddress, dataString, (err) => {
-            res.send(dataString);
+
+        fs.writeFile(__dirname + '/../data/game-lists.json', JSON.stringify(gameLists), (err) => {
+            res.json(gameList);
         });
     
     });
 }
-function removeGameFromCollection(webAddress, req, res){
-    fs.readFile(__dirname + webAddress, 'utf8' , (_err, data) => {
-        const dataArray = JSON.parse(data);
+function removeGameFromCollection(gameListId, req, res){
+    fs.readFile(__dirname + '/../data/game-lists.json', 'utf8' , (_err, data) => {
+        const gameLists = JSON.parse(data);
+        const gameList = gameLists.find((list) => list.id === gameListId);
         const itemIndex = parseInt(req.body);
-        if(itemIndex > -1 && itemIndex<dataArray.length){
-            dataArray.splice(itemIndex,1);
-            const dataString = JSON.stringify(dataArray);
-            fs.writeFile(__dirname + webAddress, dataString,(_err) => {
-                res.send(dataString);
+        if(itemIndex > -1 && itemIndex < gameList.items.length){
+            gameList.items.splice(itemIndex,1);
+            fs.writeFile(__dirname + '/../data/game-lists.json', JSON.stringify(gameLists),(_err) => {
+                res.json(gameList);
             });
         } else{
-            res.send(data);
+            res.json(gameList);
         }
     });
 }
@@ -40,29 +41,32 @@ app.use((request, response, next) => {
 });
 app.use(express.json());
 app.use(express.text());
-
-app.get('/played-games', (req, res) => {
-    fs.readFile(__dirname + '/../data/played-games.json', 'utf8' , (err, data) => {
-        res.send(data);
+function getGameList(gameListId,res){
+    fs.readFile(__dirname + '/../data/game-lists.json', 'utf8' , (err,data) => {
+        const gameLists = JSON.parse(data);
+        const gameList = gameLists.find((list) => list.id === gameListId);
+        res.json(gameList);
     });
+}
+app.get('/played-games', (req, res) => {
+    getGameList("0",res);
 });
 
 app.get('/unplayed-games', (req, res) => {
-    fs.readFile(__dirname + '/../data/unplayed-games.json', 'utf8' , (err, data) => {
-        res.send(data);
-    });
+    getGameList("1",res);
 });
+
 app.post('/add-unplayed-game', (req, res) => {
-    addGameToCollection('/../data/unplayed-games.json', req, res);
+    addGameToCollection('1', req, res);
 });
 app.post('/add-played-game', (req, res) => {
-    addGameToCollection('/../data/played-games.json', req, res);
+    addGameToCollection('0', req, res);
 });
 app.delete('/remove-played-game', (req, res) => {
-    removeGameFromCollection('/../data/played-games.json', req, res);
+    removeGameFromCollection('0', req, res);
 });
 app.delete('/remove-unplayed-game', (req, res) =>{
-    removeGameFromCollection('/../data/unplayed-games.json', req, res);
+    removeGameFromCollection('1', req, res);
 });
 app.get('/', (req,res) => res.send("hello again"));
 
