@@ -1,9 +1,9 @@
-
 const { response } = require('express');
 const express = require('express');
 const fs = require('fs');
 const app = express();
-const port = 3001;
+const port = 3000;
+app.use(express.static('src/public'));
 function addGameToCollection(webAddress, req, res){
     fs.readFile(__dirname + webAddress, 'utf8' , (err, data) => {
         const dataArray = JSON.parse(data);
@@ -40,7 +40,6 @@ app.use((request, response, next) => {
 });
 app.use(express.json());
 app.use(express.text());
-app.use('/assets', express.static('assets'));
 
 app.get('/played-games', (req, res) => {
     fs.readFile(__dirname + '/../data/played-games.json', 'utf8' , (err, data) => {
