@@ -47,13 +47,13 @@ div.button-class-block{
     padding-bottom: 0px;
     padding-top: 0px;
     float:right;
-    margin-right: 5px;
+    margin-right: 3px;
     background-color: red;
     border-color:white;
 }
 .delete-button:hover{
     background-color: rgb(211, 4, 4);
-    border-radius: 3px;
+    /* border-radius: 3px; */
 }
 button.add-buttons{
     float: right;
@@ -81,7 +81,7 @@ li {
     
 }
 li:hover{
-    margin-right: 3px;
+    /* margin-right: 3px; */
     margin-left: 3px;
     border: 1px solid black;
     border-radius: 2px;

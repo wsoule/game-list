@@ -14,10 +14,11 @@ app.use(express.text());
 app.use(express.static('src/public'));
 
 /**
- * 
+ * @constant {string} list is the list that is located in game-lists, 1 is unplayed and 0 is played
  * @param {string} gameListId ID number that represents the list that is wanted
- * @param {*} request 
+ * @param {*} request is the the gameTitle param in front end ex. "game to add - death strading" the death stranding would be request
  * @param {*} response 
+ * fs.writeFile 
  */
 
 function addGameToCollection(gameListId, request, response){

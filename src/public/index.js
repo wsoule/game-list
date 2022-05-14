@@ -7,7 +7,8 @@ function askPrompt(){
     return prompt("Game Name");
 }
 /**
- * 
+ * @constant {promise} promisedGames goes to the back-end, tells the back-end to add the gameTitle param to the json file that is at /add-(played or unplayed)-game
+ * then it makes a new list of games with the updated json
  * @param {string} listName name of the list that is wanted to await ex. played or unplayed
  * @param {variable} gameList the HTML UL item (unplayedList or playedList)
  * @param {variable} gameTitle the game from the backend that is being sent to the back end and added to the /add-played-games page. gameTitle is usually the prompt
@@ -29,7 +30,7 @@ async function deleteElement(list, listName, gameIndex){
     makeListofGames(list, listName, await gameResponse.json());
 }
 /**
- * 
+ * asks prompt 
  */
 async function addNewGameUnplayed(){
     const gameTitle = askPrompt();
