@@ -6,6 +6,48 @@ const environment = {
 function askPrompt(){
     return prompt("Game Name");
 }
+
+const playedList = document.getElementById('played-list');
+const unplayedList = document.getElementById('unplayed');
+
+/**
+ *
+ * @param {*} list
+ * @param {*} listName
+ * @param {*} gameName
+ * @param {*} gameIndex
+ * @returns
+ */
+function addGame(list, listName, gameName, gameIndex){
+    if(!gameName.trim()){
+        return;
+    }
+    const listItem = document.createElement('li');
+    const textNode = document.createTextNode(gameName);
+    const buttonList = document.createElement('button');
+    buttonList.innerText = 'X';
+    buttonList.classList.add('delete-button');
+    buttonList.addEventListener("click", function(){
+        deleteElement(list, listName, gameIndex);
+    });
+    listItem.appendChild(textNode);
+    listItem.appendChild(buttonList)
+    list.appendChild(listItem);
+
+}
+
+/**
+ *
+ * @param {*} list
+ * @param {*} listName
+ * @param {*} gamesList
+ */
+function makeListofGames(list,listName, gamesList){
+    gamesList.items.forEach((gameName, gameIndex) => {
+        addGame(list,listName, gameName, gameIndex);
+    });
+}
+
 /**
  * @constant {promise} promisedGames goes to the back-end, tells the back-end to add the gameTitle param to the json file that is at /add-(played or unplayed)-game
  * then it makes a new list of games with the updated json
@@ -18,21 +60,11 @@ async function addGamePromise(listName, gameList, gameTitle){
     gameList.innerHTML = '';
     makeListofGames(gameList, listName, await promisedGames.json());
 }
-/**
- * 
- * @param {*} list 
- * @param {*} listName 
- * @param {*} gameIndex 
- */
-async function deleteElement(list, listName, gameIndex){
-    const gameResponse = await deleteText(`${environment.urls.api}/remove-${listName}-game`, gameIndex);
-    list.innerHTML = '';
-    makeListofGames(list, listName, await gameResponse.json());
-}
+
 /**
  * asks prompt 
  */
-async function addNewGameUnplayed(){
+ async function addNewGameUnplayed(){
     const gameTitle = askPrompt();
     if(gameTitle != ''){
         addGamePromise("unplayed", unplayedList, gameTitle);
@@ -51,42 +83,35 @@ async function addNewGamePlayed(){
         await deleteElement(unplayedList,"unplayed", index);
     }
 }
+
 /**
  * 
- * @param {*} list 
- * @param {*} listName 
- * @param {*} gamesList 
- */
-function makeListofGames(list,listName, gamesList){
-    gamesList.items.forEach((gameName, gameIndex) => {
-        addGame(list,listName, gameName, gameIndex);
-    }); 
-}
-/**
- * 
- * @param {*} list 
- * @param {*} listName 
- * @param {*} gameName 
- * @param {*} gameIndex 
+ * @param {*} url 
+ * @param {*} body 
  * @returns 
  */
-function addGame(list, listName, gameName, gameIndex){
-    if(!gameName || !gameName.trim()){
-        return;
-    }
-    const listItem = document.createElement('li');
-    const textNode = document.createTextNode(gameName);
-    const buttonList = document.createElement('button');
-    buttonList.innerText = 'X';
-    buttonList.classList.add('delete-button');
-    buttonList.addEventListener("click", function(){
-        deleteElement(list, listName, gameIndex);
+ function deleteText(url, body){
+    return fetch(url, {
+        body: body,
+        headers: {
+            'Content-Type':'text/plain'
+        },
+        method: 'DELETE'
     });
-    listItem.appendChild(textNode);
-    listItem.appendChild(buttonList)
-    list.appendChild(listItem); 
-
 }
+
+/**
+ *
+ * @param {*} list
+ * @param {*} listName
+ * @param {*} gameIndex
+ */
+async function deleteElement(list, listName, gameIndex){
+    const gameResponse = await deleteText(`${environment.urls.api}/remove-${listName}-game`, gameIndex);
+    list.innerHTML = '';
+    makeListofGames(list, listName, await gameResponse.json());
+}
+
 /**
  * 
  * @param {*} url 
@@ -102,26 +127,7 @@ function postText(url, body){
         method: 'POST'
     });
 }
-/**
- * 
- * @param {*} url 
- * @param {*} body 
- * @returns 
- */
-function deleteText(url, body){
-    return fetch(url, {
-        body: body,
-        headers: {
-            'Content-Type':'text/plain'
-        },
-        method: 'DELETE'
-    });
-}
-/**
- * 
- */
-const playedList = document.getElementById('played-list');
-const unplayedList = document.getElementById('unplayed');
+
 
 /**
  * 
